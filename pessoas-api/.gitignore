@@ -1,44 +1,61 @@
-.DS_STORE
+#
+# Project specific excludes
+#
 
-/dist/
-/bazel-out
-/integration/bazel/bazel-*
-*.log
-node_modules
+tomcat
 
-# Include when developing application packages.
-pubspec.lock
-.c9
+#
+# Default excludes
+#
+
+### Gradle ###
+.gradle
+/build/
+
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
+
+# Maven 
+target/
+
+# IntelliJ project files 
+*.iml
+*.iws
+*.ipr
 .idea/
-.devcontainer/*
-!.devcontainer/README.md
-!.devcontainer/recommended-devcontainer.json
-!.devcontainer/recommended-Dockerfile
+
+# eclipse project file
 .settings/
-.vscode/launch.json
-.vscode/settings.json
-.vscode/tasks.json
-*.swo
-modules/.settings
-modules/.vscode
-.vimrc
-.nvimrc
+.classpath
+.project
 
-# Don't check in secret files
-*secret.js
+# NetBeans specific
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
 
-# Ignore npm/yarn debug log
-npm-debug.log
-yarn-error.log
 
-# build-analytics
-.build-analytics
+# OS
+.DS_Store
 
-# rollup-test output
-/modules/rollup-test/dist/
-
-# User specific bazel settings
-.bazelrc.user
-
-.notes.md
-baseline.json
+# Misc
+*.swp
+release.properties
+pom.xml.releaseBackup
+pom.xml.tag
