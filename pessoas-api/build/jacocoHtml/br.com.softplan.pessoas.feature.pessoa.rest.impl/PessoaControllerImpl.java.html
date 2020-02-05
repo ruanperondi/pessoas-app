@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PessoaControllerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pessoas-api</a> &gt; <a href="index.source.html" class="el_package">br.com.softplan.pessoas.feature.pessoa.rest.impl</a> &gt; <span class="el_source">PessoaControllerImpl.java</span></div><h1>PessoaControllerImpl.java</h1><pre class="source lang-java linenums">package br.com.softplan.pessoas.feature.pessoa.rest.impl;
+
+import java.util.function.Function;
+import javax.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import br.com.softplan.pessoas.core.annotations.DefaultApiResponse;
+import br.com.softplan.pessoas.core.exceptions.NegocioException;
+import br.com.softplan.pessoas.core.jpa.pessoa.Pessoa;
+import br.com.softplan.pessoas.core.jpa.pessoa.PessoaFactory;
+import br.com.softplan.pessoas.core.jpa.vo.CPF;
+import br.com.softplan.pessoas.feature.pessoa.exceptions.PessoaExistenteException;
+import br.com.softplan.pessoas.feature.pessoa.exceptions.PessoaNaoEncontradaException;
+import br.com.softplan.pessoas.feature.pessoa.negocio.PessoaService;
+import br.com.softplan.pessoas.feature.pessoa.rest.PessoaController;
+import br.com.softplan.pessoas.feature.pessoa.rest.PessoaDTO;
+import lombok.Setter;
+
+<span class="fc" id="L26">public abstract class PessoaControllerImpl&lt;T extends PessoaDTO&gt; implements PessoaController&lt;T&gt; {</span>
+
+<span class="fc" id="L28">  @Setter</span>
+  private PessoaService service;
+
+<span class="fc" id="L31">  @Setter</span>
+  private Function&lt;Pessoa, T&gt; convertFunction;
+
+  @Override
+  @DefaultApiResponse
+  @GetMapping
+  public Page&lt;T&gt; listarPessoas(T pessoaDTO, @RequestParam(value = &quot;page&quot;, required = false, defaultValue = &quot;0&quot;) int page, @RequestParam(value = &quot;size&quot;, required = false, defaultValue = &quot;10&quot;) int size) {
+<span class="fc" id="L38">    Pessoa pessoa = PessoaFactory.filterOf(pessoaDTO.getNome(), pessoaDTO.getSexo(), pessoaDTO.getCpf(), pessoaDTO.getNaturalidade(), pessoaDTO.getNacionalidade(), pessoaDTO.getDataNascimento(), pessoaDTO.getEmail());</span>
+
+<span class="fc" id="L40">    return service.listarPessoas(pessoa, page, size).map(convertFunction::apply);</span>
+  }
+
+  @Override
+  @DefaultApiResponse
+  @PostMapping
+  public ResponseEntity&lt;T&gt; salvar(@Valid @RequestBody T pessoaDTO) throws NegocioException, PessoaExistenteException {
+<span class="fc" id="L47">    Pessoa pessoa = PessoaFactory.of(pessoaDTO.getNome(), pessoaDTO.getSexo(), pessoaDTO.getCpf(), pessoaDTO.getNaturalidade(), pessoaDTO.getNacionalidade(), pessoaDTO.getDataNascimento(), pessoaDTO.getEmail());</span>
+
+<span class="fc" id="L49">    pessoa = service.salvar(pessoa);</span>
+
+<span class="fc" id="L51">    return ResponseEntity.ok(this.convertFunction.apply(pessoa));</span>
+  }
+
+  @Override
+  @DefaultApiResponse
+  @PutMapping(&quot;/{cpf}&quot;)
+  public ResponseEntity&lt;T&gt; editar(@PathVariable(&quot;cpf&quot;) String cpf, @Valid @RequestBody T pessoaDTO) throws PessoaNaoEncontradaException, NegocioException {
+<span class="fc" id="L58">    Pessoa pessoa = PessoaFactory.of(pessoaDTO.getNome(), pessoaDTO.getSexo(), pessoaDTO.getCpf(), pessoaDTO.getNaturalidade(), pessoaDTO.getNacionalidade(), pessoaDTO.getDataNascimento(), pessoaDTO.getEmail());</span>
+
+<span class="fc" id="L60">    pessoa = service.editar(CPF.of(cpf), pessoa);</span>
+
+<span class="fc" id="L62">    return ResponseEntity.ok(this.convertFunction.apply(pessoa));</span>
+  }
+
+  @Override
+  @DefaultApiResponse
+  @DeleteMapping(&quot;/{cpf}&quot;)
+  public ResponseEntity&lt;T&gt; remover(@PathVariable(&quot;cpf&quot;) String cpf) throws PessoaNaoEncontradaException, NegocioException {
+<span class="fc" id="L69">    return ResponseEntity.ok(this.convertFunction.apply(service.remover(CPF.of(cpf))));</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
