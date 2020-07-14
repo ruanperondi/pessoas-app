@@ -1,0 +1,16 @@
+version: "3.5"
+ 
+services:
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  back-end:
+    build: .
+    command: java -jar -Dspring.profiles.active=docker app/pessoas-app.java
+    ports:
+      - target: 8080
+        published: 8080
+    depends_on: 
+      - database

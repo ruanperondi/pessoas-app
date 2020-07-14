@@ -47,6 +47,9 @@ dependencies {
 	compile 'io.springfox:springfox-swagger2:2.9.2'
     compile 'io.springfox:springfox-swagger-ui:2.9.2'
 	
+	compile 'org.postgresql:postgresql:42.2.14'
+	
+	
 	compile 'org.apache.commons:commons-lang3:3.9'
 	compile 'br.com.caelum.stella:caelum-stella-core:2.1.2'
 	
